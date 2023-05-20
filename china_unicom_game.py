@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 # -- coding: utf-8 --
 # -------------------------------
+# @recreate :dahai9
 # @Author : github@limoruirui https://github.com/limoruirui
-# @Time : 2023/1/27 21:03
+# @Time : 2023/5/20 11:03
 # cron "" script-path=xxx.py,tag=匹配cron用
 # const $ = new Env('某通畅游');
 # -------------------------------
@@ -18,6 +19,7 @@
 5. 特别说明
     i.第一次运行会因为没有积分而无法进行积分抽奖 可再运行一次或者等第二天再抽奖即可 目前场次不多 不会每天都抽
     ii. 兑换话费已写 但未调用 有需要自行修改调用
+    iii.解决接口改变，但不提供完整运行代码，仅有关键接口
 """
 from time import sleep
 from requests import post, get
@@ -46,6 +48,27 @@ class CUG:
         print(data)
         self.ecs_token = data["ecs_token"]
         # print(self.ecs_token)
+    # str_ticket = '&ticket=(.*?)&version'
+    def getticket(self):
+        cookie = ecs_token
+        url = 'https://m.client.10010.com/mobileService/openPlatform/openPlatLineNew.htm?to_url=https://web.wostore.cn/web/flowGame/index.html?channelId=GAMELTAPP_90006&pushid=99'
+        headers = {
+            "Accept-Language": "zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Connection": "keep-alive",
+            "user-agent": self.run_ua,
+            "Accept": "text\/html,application\/xhtml+xml,application\/xml;q=0.9,*\/*;q=0.8",
+            "Host": "m.client.10010.com",
+            "Cookie": cookie,
+        }
+        try:
+            data = get(url, headers=headers, allow_redirects=False).headers
+            print(data['Location'])
+           
+            ticket = re.findall(str_ticket, data['Location'])[0]
+        except Exception as e:
+            print("接口改变")
+            exit(0)
     def login(self):
         url = "https://game.wostore.cn/api/app//user/v2/login"
         body = {
