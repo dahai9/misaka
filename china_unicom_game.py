@@ -74,6 +74,7 @@ class CUG:
         body = {
             "identityType": "esToken",
             "code": self.ecs_token
+            'uuid':'xxxxxxxxxxxxxxxxxx' #需要自己抓包获取
         }
         headers = {
             "pragma": "no-cache",
